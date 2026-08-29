@@ -10,7 +10,9 @@ function safePath(href: string) {
 }
 
 function linkLabel(text: string, href: string) {
-  if (text === href || text.startsWith("/tasks/")) return "Open task";
+  const taskPage = /^\/tasks\/[a-z0-9-]+$/i.test(href);
+  if (taskPage && (text === href || /^\/tasks\//i.test(text))) return "Open";
+  if (href === "/tasks" && (text === href || text.startsWith("/"))) return "Find Work";
   return text;
 }
 
