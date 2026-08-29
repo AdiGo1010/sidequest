@@ -18,6 +18,7 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "sidequest/**",
+      "sidequest-main/**",
     ],
   },
 ];
