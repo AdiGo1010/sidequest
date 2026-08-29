@@ -14,10 +14,10 @@ export default function HomePage() {
           BUILT BY STUDENTS, FOR STUDENTS
         </div>
         <h1 className="mt-7 max-w-3xl text-[2.15rem] font-bold leading-[1.14] tracking-tight sm:text-5xl">
-          What if every student could turn free time, skills, and unused gear into{" "}
+        Stop applying. Start earning.{" "}
           <span className="sq-underline">paid work</span>
           <span className="mt-3 block text-[1.35rem] font-semibold leading-snug sm:text-3xl">
-            — without high fees or endless applications?
+           For students, By students.
           </span>
         </h1>
         <p className="mt-6 max-w-2xl text-base leading-7 text-ink-soft sm:text-lg">
