@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { ChatMarkdown } from "@/components/chat-markdown";
 import { useApp } from "@/lib/use-app";
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -95,13 +96,15 @@ export function SupportChat() {
           <div ref={listRef} className="flex-1 space-y-2 overflow-y-auto px-3 py-3 text-sm">
             {messages.map((m, i) => (
               <div key={i} className={m.role === "user" ? "text-right" : "text-left"}>
-                <span
-                  className={`inline-block max-w-[90%] whitespace-pre-wrap rounded-2xl px-3 py-2 leading-5 ${
-                    m.role === "user" ? "bg-navy text-white" : "bg-sand text-ink"
+                <div
+                  className={`inline-block max-w-[90%] rounded-2xl px-3 py-2 leading-5 ${
+                    m.role === "user"
+                      ? "whitespace-pre-wrap bg-navy text-left text-white"
+                      : "bg-sand text-ink"
                   }`}
                 >
-                  {m.content}
-                </span>
+                  {m.role === "assistant" ? <ChatMarkdown text={m.content} /> : m.content}
+                </div>
               </div>
             ))}
             {loading ? <p className="text-xs text-ink-soft">Thinking…</p> : null}

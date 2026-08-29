@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
       ?.slice(0, 12)
       .map(
         (t) =>
-          `- ${t.title} (${t.category}, $${t.budget}, ${t.location}) → /tasks/${t.id}`,
+          `- **${t.title}** ($${t.budget}, ${t.location}) — [Open](/tasks/${t.id})`,
       )
       .join("\n") ?? "(no open tasks in this session)";
 
@@ -65,7 +65,12 @@ export async function POST(req: NextRequest) {
         model,
         contents,
         config: {
-          systemInstruction: `You are the SideQuest in-app assistant. Be brief, warm, and practical. Australian English. Use markdown sparingly.
+          systemInstruction: `You are the SideQuest in-app assistant. Be brief, warm, and practical. Australian English.
+
+Formatting rules (the UI renders markdown):
+- Bold job titles with **Title**.
+- Link a job as [Title](/tasks/id) — never [path](path), never a bare /tasks/id, never escaped asterisks like \\*\\*.
+- Use a short hyphen list for gigs.
 
 ${SUPPORT_KB}
 
