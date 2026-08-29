@@ -10,49 +10,42 @@ const links = [
   { href: "/tasks/new", label: "Post a Task" },
   { href: "/equipment", label: "Equipment" },
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/calendar", label: "Calendar" },
 ];
 
 export function SiteNav() {
   const pathname = usePathname();
   const { me, logout } = useApp();
 
+  function hrefFor(l: (typeof links)[number]) {
+    if (l.href === "/dashboard" && me?.role === "client") return "/my-tasks";
+    return l.href;
+  }
+
+  function active(l: (typeof links)[number]) {
+    const href = hrefFor(l);
+    return pathname === href || (href !== "/" && pathname.startsWith(href + "/"));
+  }
+
   return (
-    <header className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5 pb-12 sm:px-8 md:pb-5">
-      <Link href="/" className="shrink-0 transition-transform hover:scale-[1.02]">
-        <BrandMark />
+    <>
+    <header className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-5 py-4 sm:px-8">
+      <Link href="/" className="shrink-0">
+        <BrandMark compact />
       </Link>
-      <nav className="hidden items-center gap-8 text-[14.5px] font-medium text-ink md:flex">
+      <nav className="hidden items-center gap-1 text-[14px] font-medium text-ink md:flex">
         {links.map((l) => (
           <Link
             key={l.href}
-            href={
-              l.href === "/dashboard" && me?.role === "client" ? "/my-tasks" : l.href
-            }
-            className={`transition-opacity hover:opacity-70 ${
-              pathname === l.href || (l.href !== "/" && pathname.startsWith(l.href + "/"))
-                ? "opacity-100"
-                : "opacity-80"
+            href={hrefFor(l)}
+            className={`rounded-full px-4 py-2 transition ${
+              active(l) ? "bg-sand" : "hover:bg-sand/60"
             }`}
           >
             {l.label}
           </Link>
         ))}
       </nav>
-      <nav className="absolute left-0 right-0 top-full flex justify-center gap-4 px-4 pb-2 text-xs font-medium md:hidden">
-        {links.map((l) => (
-          <Link
-            key={l.href}
-            href={
-              l.href === "/dashboard" && me?.role === "client" ? "/my-tasks" : l.href
-            }
-            className="opacity-80"
-          >
-            {l.label}
-          </Link>
-        ))}
-      </nav>
-      <div className="flex items-center gap-4 text-[14.5px] font-medium">
+      <div className="flex items-center gap-3 text-[14px] font-medium">
         {me ? (
           <>
             <Link href="/profile" className="hidden sm:inline hover:opacity-70">
@@ -69,11 +62,25 @@ export function SiteNav() {
         )}
         <Link
           href={me ? (me.role === "client" ? "/my-tasks" : "/dashboard") : "/signup"}
-          className="rounded-full bg-ink px-4 py-2 text-sm text-white shadow-sm transition hover:bg-black"
+          className="rounded-full bg-navy px-4 py-2 text-sm text-lime"
         >
           {me ? (me.role === "client" ? "My tasks" : "Dashboard") : "Join free"}
         </Link>
       </div>
     </header>
+    <nav className="mx-auto flex w-full max-w-6xl gap-1 overflow-x-auto px-5 pb-3 text-xs font-medium md:hidden sm:px-8">
+      {links.map((l) => (
+        <Link
+          key={l.href}
+          href={hrefFor(l)}
+          className={`shrink-0 rounded-full px-3 py-1.5 ${
+            active(l) ? "bg-sand" : "bg-white/70"
+          }`}
+        >
+          {l.label}
+        </Link>
+      ))}
+    </nav>
+    </>
   );
 }

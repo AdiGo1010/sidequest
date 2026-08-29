@@ -2,6 +2,7 @@
 
 import { Suspense, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { PageHero } from "@/components/page-hero";
 import { TaskCard } from "@/components/task-card";
 import { CATEGORIES, CITIES } from "@/lib/categories";
 import { useApp } from "@/lib/use-app";
@@ -11,122 +12,161 @@ function TasksInner() {
   const { state } = useApp();
   const params = useSearchParams();
   const router = useRouter();
+  const [q, setQ] = useState(params.get("q") ?? "");
   const [category, setCategory] = useState(params.get("category") ?? "");
   const [location, setLocation] = useState(params.get("location") ?? "");
-  const [minPay, setMinPay] = useState(params.get("min") ?? "");
-  const [posted, setPosted] = useState(params.get("posted") ?? "");
+  const [maxPay, setMaxPay] = useState(params.get("max") ?? "500");
 
-  function sync(next: {
-    category?: string;
-    location?: string;
-    min?: string;
-    posted?: string;
-  }) {
+  function sync(next: { q?: string; category?: string; location?: string; max?: string }) {
     const p = new URLSearchParams();
+    const query = next.q ?? q;
     const cat = next.category ?? category;
     const loc = next.location ?? location;
-    const min = next.min ?? minPay;
-    const post = next.posted ?? posted;
+    const max = next.max ?? maxPay;
+    if (query) p.set("q", query);
     if (cat) p.set("category", cat);
     if (loc) p.set("location", loc);
-    if (min) p.set("min", min);
-    if (post) p.set("posted", post);
+    if (max && max !== "500") p.set("max", max);
     router.replace(p.toString() ? `/tasks?${p}` : "/tasks");
   }
 
   const tasks = useMemo(() => {
+    const needle = q.trim().toLowerCase();
     return state.tasks.filter((t) => {
       if (category && t.category !== (category as Category)) return false;
       if (location && t.location !== location) return false;
-      if (minPay && t.budget < Number(minPay)) return false;
-      if (posted) {
-        const age = Date.now() - new Date(t.createdAt).getTime();
-        if (age > Number(posted) * 86400000) return false;
+      if (maxPay && t.budget > Number(maxPay)) return false;
+      if (needle) {
+        const hay = `${t.title} ${t.description} ${t.category}`.toLowerCase();
+        if (!hay.includes(needle)) return false;
       }
       return true;
     });
-  }, [state.tasks, category, location, minPay, posted]);
+  }, [state.tasks, category, location, maxPay, q]);
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-5 py-10 sm:px-8">
-      <h1 className="text-3xl font-bold tracking-tight">Find work</h1>
-      <p className="mt-2 max-w-2xl text-sm leading-6 text-ink-soft">
-        Filter by what you&apos;re actually good at, where you can get to, and what
-        pays enough for the tram home.
-      </p>
-      <div className="mt-6 grid gap-3 rounded-3xl border border-black/5 bg-white/60 p-4 sm:grid-cols-4">
-        <label className="text-xs font-medium tracking-wide text-ink-soft">
-          Category
-          <select
-            className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-2.5 text-sm text-ink"
-            value={category}
-            onChange={(e) => {
-              setCategory(e.target.value);
-              sync({ category: e.target.value });
-            }}
+    <div>
+      <PageHero
+        title="Find your next gig."
+        subtitle={`${tasks.length} live tasks across Australia`}
+      >
+        <form
+          className="mx-auto mt-8 flex max-w-2xl overflow-hidden rounded-full bg-white p-1.5"
+          onSubmit={(e) => {
+            e.preventDefault();
+            sync({ q });
+          }}
+        >
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search tasks..."
+            className="min-w-0 flex-1 bg-transparent px-4 py-2.5 text-sm text-ink outline-none"
+          />
+          <button
+            type="submit"
+            className="rounded-full bg-navy px-5 py-2.5 text-sm font-medium text-lime"
           >
-            <option value="">Any</option>
+            Search
+          </button>
+        </form>
+      </PageHero>
+
+      <div className="mx-auto grid w-full max-w-6xl gap-8 px-5 py-10 lg:grid-cols-[240px_1fr] sm:px-8">
+        <aside>
+          <p className="text-xs font-semibold tracking-wide text-ink-soft">Category</p>
+          <div className="mt-3 flex flex-wrap gap-2 lg:flex-col">
+            <FilterPill
+              active={!category}
+              onClick={() => {
+                setCategory("");
+                sync({ category: "" });
+              }}
+            >
+              All
+            </FilterPill>
             {CATEGORIES.map((c) => (
-              <option key={c.name}>{c.name}</option>
+              <FilterPill
+                key={c.name}
+                active={category === c.name}
+                onClick={() => {
+                  setCategory(c.name);
+                  sync({ category: c.name });
+                }}
+              >
+                {c.emoji} {c.name}
+              </FilterPill>
             ))}
-          </select>
-        </label>
-        <label className="text-xs font-medium tracking-wide text-ink-soft">
-          Location
+          </div>
+          <p className="mt-8 text-xs font-semibold tracking-wide text-ink-soft">
+            Location
+          </p>
           <select
-            className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-2.5 text-sm text-ink"
+            className="mt-2 w-full rounded-full border border-black/10 bg-white px-4 py-2.5 text-sm"
             value={location}
             onChange={(e) => {
               setLocation(e.target.value);
               sync({ location: e.target.value });
             }}
           >
-            <option value="">Any</option>
+            <option value="">Anywhere</option>
             {CITIES.map((c) => (
               <option key={c}>{c}</option>
             ))}
           </select>
-        </label>
-        <label className="text-xs font-medium tracking-wide text-ink-soft">
-          Min pay
-          <select
-            className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-2.5 text-sm text-ink"
-            value={minPay}
+          <p className="mt-8 text-xs font-semibold tracking-wide text-ink-soft">
+            Max budget
+          </p>
+          <p className="mt-1 text-lg font-semibold">${maxPay}</p>
+          <input
+            type="range"
+            min={20}
+            max={500}
+            step={10}
+            value={Number(maxPay)}
             onChange={(e) => {
-              setMinPay(e.target.value);
-              sync({ min: e.target.value });
+              setMaxPay(e.target.value);
+              sync({ max: e.target.value });
             }}
-          >
-            <option value="">Any</option>
-            <option value="40">$40+</option>
-            <option value="80">$80+</option>
-            <option value="150">$150+</option>
-          </select>
-        </label>
-        <label className="text-xs font-medium tracking-wide text-ink-soft">
-          Date posted
-          <select
-            className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-2.5 text-sm text-ink"
-            value={posted}
-            onChange={(e) => {
-              setPosted(e.target.value);
-              sync({ posted: e.target.value });
-            }}
-          >
-            <option value="">Any time</option>
-            <option value="1">Last day</option>
-            <option value="7">Last week</option>
-            <option value="30">Last month</option>
-          </select>
-        </label>
-      </div>
-      <p className="mt-6 text-sm text-ink-soft">{tasks.length} tasks</p>
-      <div className="mt-4 grid gap-4 md:grid-cols-2">
-        {tasks.map((t) => (
-          <TaskCard key={t.id} task={t} />
-        ))}
+            className="mt-2 w-full accent-navy"
+          />
+        </aside>
+        <div>
+          <p className="text-sm text-ink-soft">Showing {tasks.length} tasks</p>
+          <div className="mt-4 space-y-4">
+            {tasks.map((t) => {
+              const client = state.profiles.find((p) => p.id === t.clientId);
+              const applied = state.applications.filter((a) => a.taskId === t.id).length;
+              return (
+                <TaskCard key={t.id} task={t} client={client} applied={applied} />
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
+  );
+}
+
+function FilterPill({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rounded-full px-3 py-2 text-left text-sm ${
+        active ? "bg-navy text-white" : "border border-black/10 bg-white"
+      }`}
+    >
+      {children}
+    </button>
   );
 }
 

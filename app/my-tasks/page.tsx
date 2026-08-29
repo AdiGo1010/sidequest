@@ -49,7 +49,7 @@ export default function MyTasksPage() {
             type="button"
             onClick={() => setTab(s)}
             className={`rounded-full px-4 py-2 text-sm capitalize ${
-              tab === s ? "bg-ink text-lime" : "bg-white/70"
+              tab === s ? "bg-navy text-white" : "bg-white"
             }`}
           >
             {s.replace("_", " ")}
@@ -62,7 +62,7 @@ export default function MyTasksPage() {
           return (
             <article
               key={task.id}
-              className="rounded-3xl border border-black/5 bg-white/70 p-6"
+              className="rounded-3xl border border-black/5 bg-white p-6"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
@@ -77,7 +77,7 @@ export default function MyTasksPage() {
                   <button
                     type="button"
                     onClick={() => completeTask(task.id)}
-                    className="rounded-full bg-ink px-4 py-2 text-sm text-lime"
+                    className="rounded-full bg-navy px-4 py-2 text-sm text-white"
                   >
                     Mark complete
                   </button>

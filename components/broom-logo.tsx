@@ -1,53 +1,50 @@
-export function BroomLogo({ className = "h-8 w-8" }: { className?: string }) {
+export function BrandMark({ compact = false }: { compact?: boolean }) {
   return (
-    <svg
-      viewBox="0 0 48 48"
-      className={className}
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden
-    >
-      <circle cx="24" cy="24" r="24" fill="#16181d" />
-      <path
-        d="M29.2 10.2c.55-.55 1.45-.55 2 0l1.6 1.6c.55.55.55 1.45 0 2L21.6 25.6"
-        stroke="#c8f542"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M21.2 25.2c-3.2 1.1-6.4 3.4-8.2 6.6 2.8.2 6.2-.6 8.8-2.2 2.6-1.6 4.4-3.6 5.2-5.4-2.1.2-4.1.4-5.8 1Z"
-        fill="#c8f542"
-      />
-      <path
-        d="M12.8 32.2c1.8 1.6 4.2 2.8 6.8 3.2"
-        stroke="#f7f3ea"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        opacity="0.75"
-      />
-      <path
-        d="M13.6 34.6c1.6 1.2 3.6 2 5.6 2.2"
-        stroke="#f7f3ea"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        opacity="0.45"
-      />
-    </svg>
+    <span className="inline-flex items-center gap-2">
+      <SideQuestWordmark compact={compact} />
+      <span className="rounded-full bg-lime px-1.5 py-0.5 text-[10px] font-bold tracking-wide text-ink">
+        AU
+      </span>
+    </span>
   );
 }
 
-export function BrandMark() {
+export function SideQuestWordmark({ compact = false }: { compact?: boolean }) {
   return (
-    <span className="inline-flex items-center gap-2.5">
-      <BroomLogo />
-      <span className="flex items-center gap-1.5">
-        <span className="text-[17px] font-semibold tracking-tight text-ink">
-          SideQuest
-        </span>
-        <span className="rounded-full bg-lime px-1.5 py-0.5 text-[10px] font-bold tracking-wide text-ink">
-          AU
-        </span>
+    <span
+      className={`relative inline-block font-bold leading-none tracking-tight text-ink ${
+        compact ? "text-[15px]" : "text-[17px]"
+      }`}
+      aria-label="SideQuest"
+    >
+      <span className="relative z-[1] ml-5 block text-[0.82em]">Side</span>
+      <span className="relative mt-[1px] block text-[1.12em]">
+        <BroomNudge className={compact ? "h-7 w-5" : "h-8 w-6"} />
+        Quest
       </span>
     </span>
+  );
+}
+
+function BroomNudge({ className }: { className: string }) {
+  return (
+    <svg
+      viewBox="0 0 28 56"
+      className={`absolute -left-5 -top-5 ${className}`}
+      fill="none"
+      aria-hidden
+    >
+      <path d="M10 10 L18 50" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+      <path
+        d="M4 8.2 C8.5 5 16.5 5.2 22 9.2 C16 12.2 10 14 4.8 13.4 C3.2 11.6 2.8 9.4 4 8.2Z"
+        fill="currentColor"
+      />
+      <path
+        d="M3.6 11 L7.4 14.4 M6.2 8.6 L10.2 13 M9.4 7.2 L13.2 12.2 M13 7 L16 12"
+        stroke="currentColor"
+        strokeWidth="1.15"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }

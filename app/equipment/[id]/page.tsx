@@ -3,7 +3,7 @@
 import { use, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Photo } from "@/components/equipment-photo";
+import { GearWell } from "@/components/equipment-photo";
 import { Arrow } from "@/components/task-card";
 import { useApp } from "@/lib/use-app";
 
@@ -50,8 +50,8 @@ export default function EquipmentDetailPage({
 
   return (
     <div className="mx-auto w-full max-w-2xl px-5 py-10">
-      <div className="overflow-hidden rounded-3xl border border-black/5 bg-white/70">
-        <Photo name={item.name} />
+      <div className="overflow-hidden rounded-3xl bg-white">
+        <GearWell category={item.category} name={item.name} />
         <div className="p-6">
           <p className="text-xs font-medium tracking-wide text-ink-soft">
             {item.category}

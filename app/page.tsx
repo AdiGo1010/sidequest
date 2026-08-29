@@ -1,124 +1,216 @@
-"use client";
-
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Arrow } from "@/components/task-card";
-import { CATEGORIES } from "@/lib/categories";
-import { TRUST_STATS } from "@/lib/seed";
-import { useApp } from "@/lib/use-app";
+import { Arrow, TaskCard } from "@/components/task-card";
+import { CATEGORIES, TRUST_STATS } from "@/lib/categories";
+import { SEED } from "@/lib/seed";
 
 export default function HomePage() {
-  const { state } = useApp();
-  const completed =
-    TRUST_STATS.tasksCompleted +
-    state.tasks.filter((t) => t.status === "completed").length;
-  const students =
-    TRUST_STATS.activeStudents +
-    state.profiles.filter((p) => p.role === "student").length;
-  const earnings = TRUST_STATS.avgEarnings;
+  const open = SEED.tasks.filter((t) => t.status === "open").slice(0, 6);
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-col items-center px-5 pb-24 pt-10 text-center sm:px-8 sm:pt-16">
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="inline-flex items-center gap-2 rounded-full border border-black/8 bg-white/55 px-4 py-1.5 text-[11px] font-semibold tracking-[0.14em] text-ink/80 backdrop-blur-md"
-      >
-        <Sparkle />
-        NOW LIVE IN SYDNEY, MELBOURNE & BRISBANE
-      </motion.div>
-
-      <motion.h1
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.08 }}
-        className="mt-8 max-w-4xl text-[2.35rem] font-bold leading-[1.12] tracking-tight text-ink sm:text-6xl sm:leading-[1.08]"
-      >
-        Earn money doing what you&apos;re{" "}
-        <span className="sq-underline px-1">good at</span>
-        <span className="mt-3 block text-[1.65rem] font-semibold tracking-tight text-ink sm:text-4xl">
-          for students, by students
-        </span>
-      </motion.h1>
-
-      <motion.p
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.16 }}
-        className="mt-7 max-w-2xl text-base leading-8 text-ink-soft sm:text-lg"
-      >
-        Finding a job in Australia — especially Sydney — is brutal when you&apos;re at
-        uni. SideQuest is the marketplace for short gigs, campus-adjacent work, and
-        the tools to actually take the job.
-      </motion.p>
-
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.24 }}
-        className="mt-10 flex flex-wrap items-center justify-center gap-3"
-      >
-        <Link
-          href="/tasks"
-          className="inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 text-[15px] font-medium text-lime shadow-lg shadow-black/10 transition hover:scale-[1.02] hover:bg-black"
-        >
-          Find Work <Arrow />
-        </Link>
-        <Link
-          href="/tasks/new"
-          className="inline-flex items-center gap-2 rounded-full bg-lime px-7 py-3.5 text-[15px] font-medium text-ink shadow-lg shadow-lime/30 transition hover:scale-[1.02] hover:bg-lime-deep"
-        >
-          Post a Task <Arrow />
-        </Link>
-      </motion.div>
-
-      <section className="mt-20 grid w-full max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3">
-        {[
-          { n: completed.toLocaleString(), l: "tasks completed" },
-          { n: students.toLocaleString(), l: "active students" },
-          { n: `$${earnings}`, l: "average earnings" },
-        ].map((s) => (
-          <div
-            key={s.l}
-            className="rounded-3xl border border-black/5 bg-white/55 px-6 py-7 backdrop-blur-sm"
+    <div className="pb-0">
+      <section className="mx-auto w-full max-w-6xl px-5 pb-16 pt-10 sm:px-8 sm:pt-16">
+        <div className="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-ink">
+          <span aria-hidden>✦</span>
+          NOW LIVE IN SYDNEY, MELBOURNE & BRISBANE
+        </div>
+        <h1 className="mt-7 max-w-3xl text-[2.4rem] font-bold leading-[1.12] tracking-tight sm:text-6xl">
+          Earn money doing what you&apos;re{" "}
+          <span className="sq-underline">good at</span>
+          <span className="mt-2 block text-[1.55rem] font-semibold sm:text-4xl">
+            — for students, by students.
+          </span>
+        </h1>
+        <p className="mt-6 max-w-xl text-base leading-7 text-ink-soft sm:text-lg">
+          Skip the rejection emails. Pick up real freelance gigs from people in your
+          city — cleaning, design, tutoring, deliveries. Cash in your account by the
+          weekend.
+        </p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link
+            href="/tasks"
+            className="inline-flex items-center gap-2 rounded-full bg-navy px-7 py-3.5 text-[15px] font-medium text-white"
           >
-            <p className="text-3xl font-bold tracking-tight">{s.n}</p>
-            <p className="mt-1 text-sm text-ink-soft">{s.l}</p>
+            Find Work <Arrow />
+          </Link>
+          <Link
+            href="/tasks/new"
+            className="inline-flex items-center gap-2 rounded-full border border-ink bg-lime px-7 py-3.5 text-[15px] font-medium text-ink"
+          >
+            Post a Task <Arrow />
+          </Link>
+        </div>
+        <div className="mt-8 flex flex-wrap gap-2 text-xs font-medium text-ink-soft">
+          {["Get paid in 24h", ".edu.au verified", "Rent the gear"].map((t) => (
+            <span key={t} className="rounded-full bg-white/80 px-3 py-1.5">
+              {t}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto grid w-full max-w-6xl grid-cols-2 gap-3 px-5 sm:grid-cols-4 sm:px-8">
+        {[
+          { n: "12,400+", l: "Tasks completed" },
+          { n: "3,200+", l: "Active students" },
+          { n: `$${TRUST_STATS.avgHourly}`, l: "Avg. hourly earn" },
+          { n: String(TRUST_STATS.universities), l: "Universities" },
+        ].map((s) => (
+          <div key={s.l} className="rounded-3xl bg-white px-5 py-6">
+            <p className="text-2xl font-bold tracking-tight sm:text-3xl">{s.n}</p>
+            <p className="mt-1 text-xs text-ink-soft sm:text-sm">{s.l}</p>
           </div>
         ))}
       </section>
 
-      <section className="mt-16 w-full max-w-5xl text-left">
-        <h2 className="text-center text-2xl font-semibold tracking-tight">
-          Featured quests
-        </h2>
-        <p className="mx-auto mt-2 max-w-xl text-center text-sm leading-6 text-ink-soft">
-          Pick a lane. Rent the gear if you don&apos;t own it yet.
-        </p>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="mx-auto mt-20 w-full max-w-6xl px-5 sm:px-8">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold tracking-widest text-ink-soft">BROWSE</p>
+            <h2 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
+              Pick your side quest
+            </h2>
+          </div>
+          <Link href="/tasks" className="text-sm font-medium">
+            All categories →
+          </Link>
+        </div>
+        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {CATEGORIES.map((c) => (
             <Link
               key={c.name}
               href={`/tasks?category=${encodeURIComponent(c.name)}`}
-              className="sq-card rounded-3xl border border-black/5 bg-white/70 p-6"
+              className="sq-card flex items-center gap-4 rounded-3xl bg-white px-5 py-5"
             >
-              <p className="text-lg font-semibold">{c.name}</p>
-              <p className="mt-2 text-sm leading-6 text-ink-soft">{c.blurb}</p>
+              <span className="text-2xl" aria-hidden>
+                {c.emoji}
+              </span>
+              <span>
+                <span className="block font-semibold">{c.name}</span>
+                <span className="text-sm text-ink-soft">{c.blurb}</span>
+              </span>
             </Link>
           ))}
         </div>
       </section>
-    </div>
-  );
-}
 
-function Sparkle() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-      <path
-        d="M7 1.2l1.1 3.4L11.5 5.7 8.1 7.4 7 10.8 5.9 7.4 2.5 5.7l3.4-1.1L7 1.2z"
-        fill="#16181d"
-      />
-    </svg>
+      <section className="mx-auto mt-20 grid w-full max-w-6xl gap-6 px-5 sm:grid-cols-2 sm:px-8">
+        <div className="rounded-3xl bg-white p-8">
+          <p className="text-xs font-semibold tracking-widest text-ink-soft">
+            FOR STUDENTS
+          </p>
+          <h2 className="mt-2 text-2xl font-bold">Side cash, on your schedule</h2>
+          <ol className="mt-6 space-y-4 text-sm leading-6">
+            <li>
+              <span className="font-semibold">01</span> — Sign up free with your
+              .edu.au email
+            </li>
+            <li>
+              <span className="font-semibold">02</span> — Browse local tasks & apply
+              with one tap
+            </li>
+            <li>
+              <span className="font-semibold">03</span> — Get the job done & cash hits
+              your bank
+            </li>
+          </ol>
+        </div>
+        <div className="rounded-3xl bg-white p-8">
+          <p className="text-xs font-semibold tracking-widest text-ink-soft">
+            FOR CLIENTS
+          </p>
+          <h2 className="mt-2 text-2xl font-bold">Get help, fast & affordable</h2>
+          <ol className="mt-6 space-y-4 text-sm leading-6">
+            <li>
+              <span className="font-semibold">01</span> — Post your task — title,
+              budget, deadline
+            </li>
+            <li>
+              <span className="font-semibold">02</span> — Pick from verified student
+              applicants
+            </li>
+            <li>
+              <span className="font-semibold">03</span> — Pay only when the job&apos;s
+              complete
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section className="mx-auto mt-20 w-full max-w-6xl px-5 sm:px-8">
+        <div className="flex items-end justify-between">
+          <div>
+            <p className="text-xs font-semibold tracking-widest text-ink-soft">LIVE NOW</p>
+            <h2 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
+              Fresh tasks today
+            </h2>
+          </div>
+          <Link href="/tasks" className="text-sm font-medium">
+            View all →
+          </Link>
+        </div>
+        <div className="mt-8 space-y-4">
+          {open.map((t) => {
+            const client = SEED.profiles.find((p) => p.id === t.clientId);
+            const applied = SEED.applications.filter((a) => a.taskId === t.id).length;
+            return (
+              <TaskCard key={t.id} task={t} client={client} applied={applied} />
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="mx-auto mt-20 w-full max-w-6xl px-5 sm:px-8">
+        <p className="text-xs font-semibold tracking-widest text-ink-soft">
+          EQUIPMENT RENTAL
+        </p>
+        <h2 className="mt-2 max-w-xl text-3xl font-bold tracking-tight">
+          Don&apos;t own it? Rent it.
+        </h2>
+        <p className="mt-3 max-w-xl text-sm leading-6 text-ink-soft">
+          Take on jobs you couldn&apos;t otherwise. Power tools, cleaning gear, design
+          tablets — all available by the day from city hubs.
+        </p>
+        <div className="mt-6 flex gap-3 text-3xl" aria-hidden>
+          <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-sand">
+            🔩
+          </span>
+          <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-sand">
+            🧹
+          </span>
+          <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-sand">
+            💦
+          </span>
+          <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-sand">
+            🪜
+          </span>
+        </div>
+        <Link
+          href="/equipment"
+          className="mt-6 inline-flex rounded-full bg-navy px-5 py-2.5 text-sm font-medium text-white"
+        >
+          Browse equipment
+        </Link>
+      </section>
+
+      <section className="mt-20 bg-navy px-5 py-16 text-center text-white sm:px-8">
+        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          Your next paycheque is one tap away.
+        </h2>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <Link
+            href="/signup"
+            className="rounded-full bg-lime px-6 py-3 text-sm font-medium text-ink"
+          >
+            Join as a student
+          </Link>
+          <Link
+            href="/tasks/new"
+            className="rounded-full border border-white/30 px-6 py-3 text-sm font-medium"
+          >
+            Post your first task
+          </Link>
+        </div>
+      </section>
+    </div>
   );
 }

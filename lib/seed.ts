@@ -32,9 +32,9 @@ export const SEED: AppState = {
       location: "Sydney",
       verifiedBadge: true,
       rating: 4.9,
-      reviewCount: 18,
-      completedTasks: 22,
-      totalEarnings: 1860,
+      reviewCount: 12,
+      completedTasks: 14,
+      totalEarnings: 1840,
       createdAt: "2026-02-12T00:00:00.000Z",
     },
     {
@@ -105,9 +105,10 @@ export const SEED: AppState = {
   tasks: [
     {
       id: "t-1",
-      title: "End-of-lease clean — Redfern sharehouse",
+      title: "Deep clean of share house before inspection",
       description:
-        "Two-bed terrace. Oven, bathrooms, windows. Bond inspection Friday. Bring your own products or rent a kit on SideQuest.",
+        "Need a 4 hour deep clean of a 3-bedroom share house. Equipment can be rented through the platform.",
+      appliedHint: 5,
       category: "Cleaning",
       budget: 180,
       location: "Sydney",
@@ -118,9 +119,10 @@ export const SEED: AppState = {
     },
     {
       id: "t-2",
-      title: "Same-day parcel run UNSW → CBD",
+      title: "Pick up & deliver groceries weekly",
       description:
-        "Need a portfolio dropped at a client office before 4pm. Compact car or bike is fine.",
+        "Weekly grocery pickup from Coles and delivery to a nearby unit. Quick & easy gig.",
+      appliedHint: 11,
       category: "Delivery",
       budget: 45,
       location: "Sydney",
@@ -131,9 +133,10 @@ export const SEED: AppState = {
     },
     {
       id: "t-3",
-      title: "First-year stats tutoring (3 sessions)",
+      title: "Year 11 Maths tutoring, weekly sessions",
       description:
-        "My sibling starts uni and is drowning in hypothesis tests. Prefer someone who’s actually taught it.",
+        "Advanced maths — 1 hour per week, in person or zoom. Looking for someone studying engineering or maths.",
+      appliedHint: 21,
       category: "Tutoring",
       budget: 160,
       location: "Melbourne",
@@ -144,9 +147,10 @@ export const SEED: AppState = {
     },
     {
       id: "t-4",
-      title: "Club ball poster + Instagram set",
+      title: "Logo design for new coffee cart at UTS",
       description:
-        "Need a chic poster, story templates, and a ticket graphic. We’ll credit you everywhere.",
+        "Looking for a fresh, modern logo for a coffee cart launching on campus. Bonus if you can do mockups on a cup.",
+      appliedHint: 14,
       category: "Graphic Design",
       budget: 220,
       location: "Sydney",
@@ -158,12 +162,13 @@ export const SEED: AppState = {
     },
     {
       id: "t-5",
-      title: "Move a studio apartment — South Bank",
+      title: "Help me move 1-bedroom apartment to Newtown",
       description:
-        "One bedroom, lots of plants. Stairs, no lift. Ute preferred.",
+        "Need 2 strong students to help move boxes and a couch on Saturday morning. Should take ~3 hours. Truck already booked, just need muscle.",
+      appliedHint: 7,
       category: "Moving",
-      budget: 250,
-      location: "Brisbane",
+      budget: 180,
+      location: "Sydney",
       deadline: "2026-09-03",
       status: "open",
       clientId: "u-tom",
@@ -171,9 +176,10 @@ export const SEED: AppState = {
     },
     {
       id: "t-6",
-      title: "Home office Wi-Fi + printer setup",
+      title: "Help setting up new MacBook + transferring files",
       description:
-        "Mesh router, AirPrint, and a Windows laptop that refuses to see the printer.",
+        "Need help moving everything across, setting up email, and showing the basics.",
+      appliedHint: 9,
       category: "Tech Help",
       budget: 90,
       location: "Melbourne",
@@ -242,6 +248,14 @@ export const SEED: AppState = {
       message: "Happy to lock a Friday slot.",
       status: "hired",
       createdAt: "2026-07-02T00:00:00.000Z",
+    },
+    {
+      id: "a-5",
+      taskId: "t-5",
+      studentId: "u-maya",
+      message: "Ute, dolly, Saturday 7am.",
+      status: "pending",
+      createdAt: "2026-08-26T00:00:00.000Z",
     },
   ],
   reviews: [
@@ -330,10 +344,4 @@ export const SEED: AppState = {
       status: "booked",
     },
   ],
-};
-
-export const TRUST_STATS = {
-  tasksCompleted: 1240,
-  activeStudents: 3800,
-  avgEarnings: 87,
 };

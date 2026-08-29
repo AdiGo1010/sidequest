@@ -41,6 +41,7 @@ export type Task = {
   clientId: string;
   hiredStudentId?: string;
   createdAt: string;
+  appliedHint?: number;
 };
 
 export type Application = {

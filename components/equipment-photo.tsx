@@ -1,7 +1,19 @@
-export function Photo({ name }: { name: string }) {
+const ICONS: Record<string, string> = {
+  Cleaning: "🧹",
+  Moving: "🛒",
+  "Graphic Design": "💧",
+  "Tech Help": "🔩",
+  Delivery: "📦",
+  Tutoring: "📚",
+};
+
+export function GearWell({ category, name }: { category: string; name: string }) {
   return (
-    <div className="flex h-36 items-center justify-center bg-gradient-to-br from-[#c9f0d4]/90 via-[#f7f3ea] to-[#f6cbb8]/80">
-      <span className="px-4 text-center text-sm font-medium text-ink/70">{name}</span>
+    <div className="flex h-36 items-center justify-center rounded-t-3xl bg-sand">
+      <span className="text-5xl" aria-hidden>
+        {ICONS[category] ?? "🧰"}
+      </span>
+      <span className="sr-only">{name}</span>
     </div>
   );
 }
