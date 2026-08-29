@@ -25,7 +25,7 @@ export function SiteFooter() {
               <Link href="/dashboard">Dashboard</Link>
             </li>
             <li>
-              <Link href="/calendar">Calendar</Link>
+              <Link href="/inbox">Inbox</Link>
             </li>
           </ul>
         </div>

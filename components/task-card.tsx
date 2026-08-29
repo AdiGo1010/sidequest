@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Profile, Task } from "@/lib/types";
-import { cityLabel, dueLabel, timeAgo } from "@/lib/format";
+import { categoryLabel, cityLabel, dueLabel, timeAgo } from "@/lib/format";
 
 export function appliedDisplay(task: Task, applicationCount: number) {
   return Math.max(applicationCount, task.appliedHint ?? 0);
@@ -22,7 +22,7 @@ export function TaskCard({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2 text-xs text-ink-soft">
             <span className="rounded-full bg-sand px-2.5 py-1 font-medium text-ink">
-              {task.category}
+              {categoryLabel(task)}
             </span>
             <span>{timeAgo(task.createdAt)}</span>
             <span>{cityLabel(task.location)}</span>

@@ -1,7 +1,7 @@
 import { SEED } from "./seed";
 import type { AppState } from "./types";
 
-const KEY = "sidequest-state-v1";
+const KEY = "sidequest-state-v2";
 
 let memory: AppState | null = null;
 const listeners = new Set<() => void>();
@@ -16,6 +16,7 @@ export function getSnapshot(): AppState {
   try {
     const raw = window.localStorage.getItem(KEY);
     memory = raw ? (JSON.parse(raw) as AppState) : cloneSeed();
+    if (!Array.isArray(memory.messages)) memory.messages = [];
   } catch {
     memory = cloneSeed();
   }

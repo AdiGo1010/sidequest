@@ -7,6 +7,7 @@ export const CATEGORIES: { name: Category; blurb: string; emoji: string }[] = [
   { name: "Graphic Design", blurb: "Posters, decks, club merch, logos", emoji: "🎨" },
   { name: "Moving", blurb: "Utes, boxes, O-week apartment shuffle", emoji: "🛻" },
   { name: "Tech Help", blurb: "Wi-Fi, laptops, printers that hate you", emoji: "💻" },
+  { name: "Other", blurb: "Anything else — name the category yourself", emoji: "✏️" },
 ];
 
 export const CITIES = ["Sydney", "Melbourne", "Brisbane"] as const;

@@ -15,6 +15,7 @@ export default function NewTaskPage() {
     title: "",
     description: "",
     category: "Cleaning" as Category,
+    customCategory: "",
     budget: 80,
     location: "Sydney",
     deadline: "",
@@ -31,7 +32,15 @@ export default function NewTaskPage() {
       setError("Switch to a client account to post a task");
       return;
     }
-    const id = postTask(form);
+    if (form.category === "Other" && !form.customCategory.trim()) {
+      setError("Type the exact category — e.g. pet sitting, photography, IKEA build");
+      return;
+    }
+    const id = postTask({
+      ...form,
+      customCategory:
+        form.category === "Other" ? form.customCategory.trim() : undefined,
+    });
     router.push(`/tasks/${id}`);
   }
 
@@ -75,6 +84,18 @@ export default function NewTaskPage() {
             ))}
           </select>
         </label>
+        {form.category === "Other" ? (
+          <label className="text-sm font-medium">
+            What kind of job is it, exactly?
+            <input
+              required
+              value={form.customCategory}
+              onChange={(e) => setForm({ ...form, customCategory: e.target.value })}
+              placeholder="e.g. Pet sitting, IKEA assembly, event staffing"
+              className="mt-1 w-full rounded-2xl border border-black/10 bg-white/80 px-4 py-3"
+            />
+          </label>
+        ) : null}
         <label className="text-sm font-medium">
           Budget (AUD)
           <input

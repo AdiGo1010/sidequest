@@ -321,6 +321,48 @@ export function useApp() {
     [],
   );
 
+  const rejectApplicant = useCallback((taskId: string, studentId: string) => {
+    setState((s) => ({
+      ...s,
+      applications: s.applications.map((a) =>
+        a.taskId === taskId && a.studentId === studentId
+          ? { ...a, status: "rejected" as const }
+          : a,
+      ),
+    }));
+  }, []);
+
+  const sendMessage = useCallback((taskId: string, body: string) => {
+    const text = body.trim();
+    if (!text) return;
+    setState((s) => {
+      if (!s.currentUserId) throw new Error("Log in first");
+      const task = s.tasks.find((t) => t.id === taskId);
+      if (!task) throw new Error("Task not found");
+      const isClient = task.clientId === s.currentUserId;
+      const isHired = task.hiredStudentId === s.currentUserId;
+      const applied = s.applications.some(
+        (a) => a.taskId === taskId && a.studentId === s.currentUserId,
+      );
+      if (!isClient && !isHired && !applied) {
+        throw new Error("Apply first, then you can message");
+      }
+      return {
+        ...s,
+        messages: [
+          {
+            id: uid("m"),
+            taskId,
+            fromId: s.currentUserId,
+            body: text,
+            createdAt: new Date().toISOString(),
+          },
+          ...s.messages,
+        ],
+      };
+    });
+  }, []);
+
   return {
     state,
     me,
@@ -331,6 +373,8 @@ export function useApp() {
     postTask,
     applyToTask,
     hireApplicant,
+    rejectApplicant,
+    sendMessage,
     completeTask,
     leaveReview,
     bookEquipment,

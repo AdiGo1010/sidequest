@@ -10,6 +10,7 @@ const links = [
   { href: "/tasks/new", label: "Post a Task" },
   { href: "/equipment", label: "Equipment" },
   { href: "/dashboard", label: "Dashboard" },
+  { href: "/inbox", label: "Inbox" },
 ];
 
 export function SiteNav() {

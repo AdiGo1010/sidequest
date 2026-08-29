@@ -20,6 +20,22 @@ export const SEED: AppState = {
     },
   ],
   suggestions: [],
+  messages: [
+    {
+      id: "m-1",
+      taskId: "t-7",
+      fromId: "u-tom",
+      body: "Friday 9am still good? I'll leave the key under the mat.",
+      createdAt: "2026-07-03T00:00:00.000Z",
+    },
+    {
+      id: "m-2",
+      taskId: "t-7",
+      fromId: "u-maya",
+      body: "Yes — I'll bring the steam mop. See you then.",
+      createdAt: "2026-07-03T00:10:00.000Z",
+    },
+  ],
   profiles: [
     {
       id: "u-maya",
@@ -214,6 +230,21 @@ export const SEED: AppState = {
       status: "open",
       clientId: "u-tom",
       createdAt: "2026-08-27T00:00:00.000Z",
+    },
+    {
+      id: "t-9",
+      title: "Weekend pet sit — one cat in Newtown",
+      description:
+        "Need someone to feed and play with a cat Saturday–Sunday. Litter already set up.",
+      category: "Other",
+      customCategory: "Pet sitting",
+      budget: 90,
+      location: "Sydney",
+      deadline: "2026-09-06",
+      status: "open",
+      clientId: "u-tom",
+      createdAt: "2026-08-28T00:00:00.000Z",
+      appliedHint: 3,
     },
   ],
   applications: [

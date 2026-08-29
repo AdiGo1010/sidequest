@@ -44,7 +44,9 @@ export default function LoginPage() {
         login(email);
       }
       const stored = JSON.parse(
-        window.localStorage.getItem("sidequest-state-v1") || "{}",
+        window.localStorage.getItem("sidequest-state-v2") ||
+          window.localStorage.getItem("sidequest-state-v1") ||
+          "{}",
       ) as { currentUserId?: string; profiles?: { id: string; role: string }[] };
       const role = stored.profiles?.find((p) => p.id === stored.currentUserId)?.role;
       await router.push(role === "client" ? "/my-tasks" : "/dashboard");

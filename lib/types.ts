@@ -10,7 +10,8 @@ export type Category =
   | "Tutoring"
   | "Graphic Design"
   | "Moving"
-  | "Tech Help";
+  | "Tech Help"
+  | "Other";
 
 export type Profile = {
   id: string;
@@ -42,6 +43,7 @@ export type Task = {
   hiredStudentId?: string;
   createdAt: string;
   appliedHint?: number;
+  customCategory?: string;
 };
 
 export type Application = {
@@ -101,6 +103,14 @@ export type QuestSuggestion = {
   confirmed: boolean;
 };
 
+export type ChatMessage = {
+  id: string;
+  taskId: string;
+  fromId: string;
+  body: string;
+  createdAt: string;
+};
+
 export type AppState = {
   profiles: Profile[];
   tasks: Task[];
@@ -110,6 +120,7 @@ export type AppState = {
   bookings: EquipmentBooking[];
   calendarEvents: CalendarEvent[];
   suggestions: QuestSuggestion[];
+  messages: ChatMessage[];
   currentUserId: string | null;
   googleConnected: boolean;
 };

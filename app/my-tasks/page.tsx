@@ -6,7 +6,7 @@ import { useApp } from "@/lib/use-app";
 import type { TaskStatus } from "@/lib/types";
 
 export default function MyTasksPage() {
-  const { me, state, hireApplicant, completeTask, leaveReview } = useApp();
+  const { me, state, hireApplicant, rejectApplicant, completeTask, leaveReview } = useApp();
   const [tab, setTab] = useState<TaskStatus>("open");
 
   if (!me) {
@@ -111,13 +111,36 @@ export default function MyTasksPage() {
                             </p>
                             <p className="mt-1 text-sm">{a.message}</p>
                           </div>
-                          <button
-                            type="button"
-                            onClick={() => hireApplicant(task.id, student.id)}
-                            className="rounded-full bg-lime px-4 py-2 text-sm font-medium"
-                          >
-                            Hire
-                          </button>
+                          <div className="flex gap-2">
+                            {a.status === "pending" ? (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => hireApplicant(task.id, student.id)}
+                                  className="rounded-full bg-lime px-4 py-2 text-sm font-medium"
+                                >
+                                  Accept
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => rejectApplicant(task.id, student.id)}
+                                  className="rounded-full border border-black/15 px-4 py-2 text-sm"
+                                >
+                                  Reject
+                                </button>
+                              </>
+                            ) : (
+                              <span className="text-xs capitalize text-ink-soft">
+                                {a.status}
+                              </span>
+                            )}
+                            <Link
+                              href={`/tasks/${task.id}`}
+                              className="rounded-full bg-navy px-4 py-2 text-sm text-white"
+                            >
+                              Chat
+                            </Link>
+                          </div>
                         </div>
                       );
                     })

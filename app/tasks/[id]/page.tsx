@@ -4,6 +4,8 @@ import { use, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Arrow } from "@/components/task-card";
+import { TaskChat } from "@/components/task-chat";
+import { categoryLabel } from "@/lib/format";
 import { useApp } from "@/lib/use-app";
 
 export default function TaskDetailPage({
@@ -54,7 +56,7 @@ export default function TaskDetailPage({
 
   return (
     <div className="mx-auto w-full max-w-3xl px-5 py-10 sm:px-8">
-      <p className="text-sm font-medium text-ink-soft">{task.category}</p>
+      <p className="text-sm font-medium text-ink-soft">{categoryLabel(task)}</p>
       <h1 className="mt-2 text-3xl font-bold tracking-tight">{task.title}</h1>
       <div className="mt-4 flex flex-wrap gap-3 text-sm">
         <span className="rounded-full bg-white/70 px-3 py-1">${task.budget}</span>
@@ -101,6 +103,7 @@ export default function TaskDetailPage({
           )}
         </form>
       )}
+      <TaskChat taskId={id} />
     </div>
   );
 }
