@@ -29,7 +29,7 @@ export function SiteNav() {
 
   return (
     <>
-    <header className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-5 py-4 sm:px-8">
+    <header className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-5 py-3 sm:px-8">
       <Link href="/" className="shrink-0">
         <BrandMark compact />
       </Link>

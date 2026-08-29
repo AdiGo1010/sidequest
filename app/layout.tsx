@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Nunito_Sans } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const nunito = Nunito_Sans({
+  variable: "--font-nunito",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -21,8 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`}>
-      <body className="sq-mesh relative flex min-h-full flex-col overflow-x-hidden">
+    <html lang="en" className={`${nunito.variable} h-full antialiased`}>
+      <body className={`${nunito.className} sq-mesh relative flex min-h-full flex-col overflow-x-hidden`}>
         <SiteNav />
         <main className="relative z-10 flex w-full flex-1 flex-col">{children}</main>
         <SiteFooter />
