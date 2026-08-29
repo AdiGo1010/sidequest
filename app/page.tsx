@@ -86,6 +86,8 @@ export default function HomePage() {
             Task history, hours worked, earnings, and an illustrative tax figure for
             your return. International students are capped at 48 hours per fortnight —
             extra applications block once you hit it. Domestic students have no cap.
+            The Ask SideQuest chat (bottom right) answers how-to questions and matches
+            you with open tasks.
           </p>
           <Link href="/dashboard" className="mt-5 inline-block text-sm font-medium">
             Open dashboard →

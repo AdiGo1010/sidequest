@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nunito_Sans } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
+import { SupportChat } from "@/components/support-chat";
 import "./globals.css";
 
 const nunito = Nunito_Sans({
@@ -27,6 +28,7 @@ export default function RootLayout({
         <SiteNav />
         <main className="relative z-10 flex w-full flex-1 flex-col">{children}</main>
         <SiteFooter />
+        <SupportChat />
       </body>
     </html>
   );
