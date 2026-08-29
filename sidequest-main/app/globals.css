@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #16181d;
+  --ink-soft: #4a5160;
+  --lime: #c8f542;
+  --lime-deep: #b6e62a;
+  --cream: #f7f3ea;
+  --peach: #f6cbb8;
+  --mint: #c9f0d4;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-lime: var(--lime);
+  --color-lime-deep: var(--lime-deep);
+  --color-cream: var(--cream);
+  --font-sans: var(--font-inter);
+}
+
+html,
+body {
+  min-height: 100%;
+  color: var(--ink);
+  background: var(--cream);
+}
+
+body {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+.sq-mesh {
+  background-color: #f6f1e8;
+  background-image:
+    radial-gradient(1100px 720px at 8% -10%, #d4f5dc 0%, transparent 58%),
+    radial-gradient(900px 640px at 92% 108%, #f7c9b6 0%, transparent 55%),
+    radial-gradient(700px 500px at 70% 8%, #fff6e8 0%, transparent 50%),
+    radial-gradient(800px 600px at 50% 45%, #fffdf8 0%, transparent 62%);
+  background-size: 120% 120%;
+  animation: meshDrift 22s ease-in-out infinite alternate;
+}
+
+@keyframes meshDrift {
+  from {
+    background-position: 0% 0%, 100% 100%, 80% 0%, 50% 40%;
+  }
+  to {
+    background-position: 8% 6%, 92% 94%, 70% 10%, 48% 50%;
+  }
+}
+
+.sq-underline {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 14' fill='none'%3E%3Cpath d='M2 9.5c22-6 48-7 70-4 22 3 44 6 66 1' stroke='%23c8f542' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 92%;
+  background-size: 100% 0.55em;
+}
+
+.sq-card {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+
+.sq-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(22, 24, 29, 0.08);
+}
+
+::selection {
+  background: var(--lime);
+  color: var(--ink);
+}
