@@ -10,13 +10,23 @@ function cloneSeed(): AppState {
   return structuredClone(SEED);
 }
 
+function normalise(state: AppState): AppState {
+  if (!Array.isArray(state.messages)) state.messages = [];
+  state.profiles = state.profiles.map((p) => ({
+    ...p,
+    licences: p.licences ?? [],
+    fortnightHours: p.fortnightHours ?? 0,
+    residency: p.residency ?? (p.role === "student" ? "domestic" : undefined),
+  }));
+  return state;
+}
+
 export function getSnapshot(): AppState {
   if (memory) return memory;
   if (typeof window === "undefined") return cloneSeed();
   try {
     const raw = window.localStorage.getItem(KEY);
-    memory = raw ? (JSON.parse(raw) as AppState) : cloneSeed();
-    if (!Array.isArray(memory.messages)) memory.messages = [];
+    memory = raw ? normalise(JSON.parse(raw) as AppState) : cloneSeed();
   } catch {
     memory = cloneSeed();
   }

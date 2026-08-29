@@ -11,9 +11,9 @@ const nunito = Nunito_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "SideQuest — earn money doing what you're good at",
+  title: "SideQuest — start your first Side Quest",
   description:
-    "Student-first freelance marketplace for Australian uni students. Find gigs, post tasks, rent equipment.",
+    "A marketplace for Australian uni students: flexible freelance work around study, lower fees, equipment rental, and adult pay from $40+.",
 };
 
 export default function RootLayout({

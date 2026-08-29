@@ -12,7 +12,7 @@ export default function EquipmentPage() {
     <div>
       <PageHero
         title="Rent the gear. Take the gig."
-        subtitle="Daily rates, pickup from city hubs in Sydney, Melbourne & Brisbane. No deposits for verified students."
+        subtitle="Tools, cleaning supplies, gardening gear — cheaper than buying for a one-off, so you can deliver better work."
       />
       <div className="mx-auto grid w-full max-w-6xl gap-4 px-5 py-10 sm:grid-cols-2 lg:grid-cols-4 sm:px-8">
         {state.equipment.map((item) => (

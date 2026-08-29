@@ -32,7 +32,8 @@ export default function MyTasksPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">My tasks</h1>
           <p className="mt-2 text-sm text-ink-soft">
-            Open, in progress, done — pick who you hire from ratings, not vibes alone.
+            Open, in progress, done. Applicants with the higher rating show first —
+            like Uber, dual ratings go both ways.
           </p>
         </div>
         <Link
@@ -89,7 +90,13 @@ export default function MyTasksPage() {
                   {apps.length === 0 ? (
                     <p className="text-sm text-ink-soft">None yet.</p>
                   ) : (
-                    apps.map((a) => {
+                    [...apps]
+                      .sort((a, b) => {
+                        const sa = state.profiles.find((p) => p.id === a.studentId);
+                        const sb = state.profiles.find((p) => p.id === b.studentId);
+                        return (sb?.rating ?? 0) - (sa?.rating ?? 0);
+                      })
+                      .map((a) => {
                       const student = state.profiles.find((p) => p.id === a.studentId);
                       if (!student) return null;
                       return (

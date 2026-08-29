@@ -46,9 +46,9 @@ export default function PublicProfilePage({
         ) : null}
       </div>
       <p className="mt-6 leading-7 text-ink-soft">{person.bio}</p>
-      {person.skills.length ? (
+      {person.skills?.length ? (
         <div className="mt-4 flex flex-wrap gap-2">
-          {person.skills.map((s) => (
+          {[...person.skills, ...(person.licences ?? [])].map((s) => (
             <span key={s} className="rounded-full bg-white/70 px-3 py-1 text-xs">
               {s}
             </span>

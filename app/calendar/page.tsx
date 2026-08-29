@@ -67,8 +67,8 @@ export default function CalendarPage() {
     <div className="mx-auto w-full max-w-3xl px-5 py-10 sm:px-8">
       <h1 className="text-3xl font-bold tracking-tight">Calendar quests</h1>
       <p className="mt-3 text-sm leading-7 text-ink-soft">
-        Connect Google Calendar. SideQuest reads free time, suggests gigs you can actually
-        take, and writes confirmed jobs back onto the calendar. Notion is next.
+        Connect Google Calendar. SideQuest only surfaces jobs that fit around class
+        — then writes confirmed gigs back onto the calendar.
       </p>
 
       {!me || me.role !== "student" ? (

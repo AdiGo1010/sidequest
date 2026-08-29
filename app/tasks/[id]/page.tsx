@@ -63,10 +63,26 @@ export default function TaskDetailPage({
         <span className="rounded-full bg-white/70 px-3 py-1">{task.location}</span>
         <span className="rounded-full bg-white/70 px-3 py-1">Due {task.deadline}</span>
         <span className="rounded-full bg-white/70 px-3 py-1 capitalize">
+          {(task.jobType ?? "one_off").replace("_", "-")}
+        </span>
+        <span className="rounded-full bg-white/70 px-3 py-1 capitalize">
           {task.status.replace("_", " ")}
         </span>
       </div>
       <p className="mt-8 text-base leading-8 text-ink-soft">{task.description}</p>
+      {task.requiredSkills ? (
+        <p className="mt-4 text-sm">
+          <span className="font-medium">Skills:</span> {task.requiredSkills}
+        </p>
+      ) : null}
+      {task.requiredEquipment ? (
+        <p className="mt-2 text-sm">
+          <span className="font-medium">Equipment:</span> {task.requiredEquipment}{" "}
+          <Link href="/equipment" className="font-medium">
+            Rent on SideQuest
+          </Link>
+        </p>
+      ) : null}
       {client ? (
         <Link
           href={`/profile/${client.id}`}

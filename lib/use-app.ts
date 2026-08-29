@@ -1,6 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import {
+  estimatedTaskHours,
+  INTERNATIONAL_FORTNIGHT_HOURS,
+  MIN_TASK_BUDGET,
+} from "./compliance";
 import { getServerSnapshot, getSnapshot, setState, subscribe, uid } from "./store";
 import { isAustralianUniEmail, uniFromEmail } from "./uni";
 import type {
@@ -9,6 +14,7 @@ import type {
   EquipmentBooking,
   Profile,
   QuestSuggestion,
+  Residency,
   Role,
   Task,
 } from "./types";
@@ -27,9 +33,16 @@ export function useApp() {
       fullName: string;
       role: Role;
       location: string;
+      residency?: Residency;
+      visaDocumentName?: string;
     }) => {
       if (input.role === "student" && !isAustralianUniEmail(input.email)) {
-        throw new Error("Students need a university email ending in .edu.au");
+        throw new Error(
+          "To accept student tasks you need a valid .edu.au email. Other emails can join as a client and post work.",
+        );
+      }
+      if (input.role === "student" && input.residency === "international" && !input.visaDocumentName) {
+        throw new Error("International students need to upload a copy of their visa.");
       }
       const exists = getSnapshot().profiles.some(
         (p) => p.email.toLowerCase() === input.email.toLowerCase(),
@@ -43,8 +56,12 @@ export function useApp() {
         uni: input.role === "student" ? uniFromEmail(input.email) : undefined,
         bio: "",
         skills: [],
+        licences: [],
+        residency: input.role === "student" ? input.residency ?? "domestic" : undefined,
+        visaDocumentName: input.visaDocumentName,
+        fortnightHours: 0,
         location: input.location,
-        verifiedBadge: input.role === "student",
+        verifiedBadge: input.role === "student" && isAustralianUniEmail(input.email),
         rating: 0,
         reviewCount: 0,
         completedTasks: 0,
@@ -74,7 +91,7 @@ export function useApp() {
   }, []);
 
   const updateProfile = useCallback(
-    (patch: Partial<Pick<Profile, "bio" | "skills" | "fullName" | "location">>) => {
+    (patch: Partial<Pick<Profile, "bio" | "skills" | "licences" | "fullName" | "location">>) => {
       setState((s) => ({
         ...s,
         profiles: s.profiles.map((p) =>
@@ -87,6 +104,9 @@ export function useApp() {
 
   const postTask = useCallback(
     (input: Omit<Task, "id" | "status" | "clientId" | "createdAt" | "hiredStudentId">) => {
+      if (input.budget < MIN_TASK_BUDGET) {
+        throw new Error(`Tasks start at $${MIN_TASK_BUDGET}+ — adult pay, no youth wage.`);
+      }
       const id = uid("t");
       setState((s) => {
         if (!s.currentUserId) throw new Error("Log in first");
@@ -107,6 +127,22 @@ export function useApp() {
   const applyToTask = useCallback((taskId: string, message: string) => {
     setState((s) => {
       if (!s.currentUserId) throw new Error("Log in first");
+      const meUser = s.profiles.find((p) => p.id === s.currentUserId);
+      if (!meUser || meUser.role !== "student" || !isAustralianUniEmail(meUser.email)) {
+        throw new Error(
+          "Only verified students with a .edu.au email can accept student tasks. Post work with a client account instead.",
+        );
+      }
+      const task = s.tasks.find((t) => t.id === taskId);
+      if (!task) throw new Error("Task not found");
+      if (meUser.residency === "international") {
+        const nextHours = (meUser.fortnightHours ?? 0) + estimatedTaskHours(task);
+        if (nextHours > INTERNATIONAL_FORTNIGHT_HOURS) {
+          throw new Error(
+            `International students are capped at ${INTERNATIONAL_FORTNIGHT_HOURS} hours per fortnight. This job would take you to ${nextHours}h.`,
+          );
+        }
+      }
       const already = s.applications.some(
         (a) => a.taskId === taskId && a.studentId === s.currentUserId,
       );
@@ -161,6 +197,7 @@ export function useApp() {
     setState((s) => {
       const task = s.tasks.find((t) => t.id === taskId);
       if (!task?.hiredStudentId) return s;
+      const hours = estimatedTaskHours(task);
       return {
         ...s,
         tasks: s.tasks.map((t) =>
@@ -172,6 +209,7 @@ export function useApp() {
                 ...p,
                 completedTasks: p.completedTasks + 1,
                 totalEarnings: p.totalEarnings + task.budget,
+                fortnightHours: (p.fortnightHours ?? 0) + hours,
               }
             : p,
         ),

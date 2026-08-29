@@ -4,8 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Arrow } from "@/components/task-card";
 import { CATEGORIES, CITIES } from "@/lib/categories";
+import { MIN_TASK_BUDGET } from "@/lib/compliance";
 import { useApp } from "@/lib/use-app";
-import type { Category } from "@/lib/types";
+import type { Category, JobType } from "@/lib/types";
 
 export default function NewTaskPage() {
   const { me, postTask } = useApp();
@@ -19,6 +20,9 @@ export default function NewTaskPage() {
     budget: 80,
     location: "Sydney",
     deadline: "",
+    jobType: "one_off" as JobType,
+    requiredSkills: "",
+    requiredEquipment: "",
   });
 
   function onSubmit(e: React.FormEvent) {
@@ -36,20 +40,28 @@ export default function NewTaskPage() {
       setError("Type the exact category — e.g. pet sitting, photography, IKEA build");
       return;
     }
-    const id = postTask({
-      ...form,
-      customCategory:
-        form.category === "Other" ? form.customCategory.trim() : undefined,
-    });
-    router.push(`/tasks/${id}`);
+    if (form.budget < MIN_TASK_BUDGET) {
+      setError(`Pay starts at $${MIN_TASK_BUDGET}+ — adult rate, no youth wage.`);
+      return;
+    }
+    try {
+      const id = postTask({
+        ...form,
+        customCategory:
+          form.category === "Other" ? form.customCategory.trim() : undefined,
+      });
+      router.push(`/tasks/${id}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not publish");
+    }
   }
 
   return (
     <div className="mx-auto w-full max-w-xl px-5 py-10">
       <h1 className="text-3xl font-bold tracking-tight">Post a task</h1>
       <p className="mt-2 text-sm leading-6 text-ink-soft">
-        Lower fees than the usual suspects. Be specific — students apply faster
-        when they know the stairs situation.
+        Description, location, date, budget, and any skills or equipment. Tasks start
+        at ${MIN_TASK_BUDGET}+ — at or above minimum wage, no youth discount.
       </p>
       <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-4">
         <label className="text-sm font-medium">
@@ -97,13 +109,46 @@ export default function NewTaskPage() {
           </label>
         ) : null}
         <label className="text-sm font-medium">
-          Budget (AUD)
+          Job type
+          <select
+            value={form.jobType}
+            onChange={(e) =>
+              setForm({ ...form, jobType: e.target.value as JobType })
+            }
+            className="mt-1 w-full rounded-2xl border border-black/10 bg-white/80 px-4 py-3"
+          >
+            <option value="one_off">One-off</option>
+            <option value="ongoing">Ongoing</option>
+          </select>
+        </label>
+        <label className="text-sm font-medium">
+          Budget (AUD) — min ${MIN_TASK_BUDGET}
           <input
             required
             type="number"
-            min={20}
+            min={MIN_TASK_BUDGET}
             value={form.budget}
             onChange={(e) => setForm({ ...form, budget: Number(e.target.value) })}
+            className="mt-1 w-full rounded-2xl border border-black/10 bg-white/80 px-4 py-3"
+          />
+        </label>
+        <label className="text-sm font-medium">
+          Required skills (optional)
+          <input
+            value={form.requiredSkills}
+            onChange={(e) => setForm({ ...form, requiredSkills: e.target.value })}
+            placeholder="e.g. driver's licence, gardening"
+            className="mt-1 w-full rounded-2xl border border-black/10 bg-white/80 px-4 py-3"
+          />
+        </label>
+        <label className="text-sm font-medium">
+          Required equipment (optional)
+          <input
+            value={form.requiredEquipment}
+            onChange={(e) =>
+              setForm({ ...form, requiredEquipment: e.target.value })
+            }
+            placeholder="e.g. steam mop — or rent on SideQuest"
             className="mt-1 w-full rounded-2xl border border-black/10 bg-white/80 px-4 py-3"
           />
         </label>

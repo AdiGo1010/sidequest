@@ -13,6 +13,8 @@ export type Category =
   | "Tech Help"
   | "Other";
 
+export type Residency = "domestic" | "international";
+
 export type Profile = {
   id: string;
   email: string;
@@ -21,6 +23,10 @@ export type Profile = {
   uni?: string;
   bio: string;
   skills: string[];
+  licences: string[];
+  residency?: Residency;
+  visaDocumentName?: string;
+  fortnightHours: number;
   location: string;
   verifiedBadge: boolean;
   rating: number;
@@ -29,6 +35,8 @@ export type Profile = {
   totalEarnings: number;
   createdAt: string;
 };
+
+export type JobType = "one_off" | "ongoing";
 
 export type Task = {
   id: string;
@@ -44,6 +52,10 @@ export type Task = {
   createdAt: string;
   appliedHint?: number;
   customCategory?: string;
+  jobType?: JobType;
+  requiredSkills?: string;
+  requiredEquipment?: string;
+  estimatedHours?: number;
 };
 
 export type Application = {

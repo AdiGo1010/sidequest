@@ -8,8 +8,9 @@ export function SiteFooter() {
         <div className="sm:col-span-2">
           <BrandMark />
           <p className="mt-4 max-w-sm text-sm leading-6 text-ink-soft">
-            Australia&apos;s student-first freelance marketplace. Built by students, for
-            students. Lower fees than Airtasker, real jobs, real cash.
+            Built by students, for students. Turn free time, skills, and unused gear
+            into paid work — lower fees, real opportunities, equipment when you need
+            it.
           </p>
         </div>
         <div>

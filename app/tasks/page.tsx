@@ -4,51 +4,83 @@ import { Suspense, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PageHero } from "@/components/page-hero";
 import { TaskCard } from "@/components/task-card";
+import { taskMatchScore } from "@/lib/calendar-suggest";
 import { CATEGORIES, CITIES } from "@/lib/categories";
 import { useApp } from "@/lib/use-app";
-import type { Category } from "@/lib/types";
+import type { Category, JobType } from "@/lib/types";
 
 function TasksInner() {
-  const { state } = useApp();
+  const { state, me } = useApp();
   const params = useSearchParams();
   const router = useRouter();
   const [q, setQ] = useState(params.get("q") ?? "");
   const [category, setCategory] = useState(params.get("category") ?? "");
   const [location, setLocation] = useState(params.get("location") ?? "");
   const [maxPay, setMaxPay] = useState(params.get("max") ?? "500");
+  const [after, setAfter] = useState(params.get("after") ?? "");
+  const [jobType, setJobType] = useState(params.get("type") ?? "");
+  const [calendarFit, setCalendarFit] = useState(params.get("cal") === "1");
 
-  function sync(next: { q?: string; category?: string; location?: string; max?: string }) {
+  function sync(next: {
+    q?: string;
+    category?: string;
+    location?: string;
+    max?: string;
+    after?: string;
+    type?: string;
+    cal?: string;
+  }) {
     const p = new URLSearchParams();
     const query = next.q ?? q;
     const cat = next.category ?? category;
     const loc = next.location ?? location;
     const max = next.max ?? maxPay;
+    const date = next.after ?? after;
+    const type = next.type ?? jobType;
+    const cal = next.cal ?? (calendarFit ? "1" : "");
     if (query) p.set("q", query);
     if (cat) p.set("category", cat);
     if (loc) p.set("location", loc);
     if (max && max !== "500") p.set("max", max);
+    if (date) p.set("after", date);
+    if (type) p.set("type", type);
+    if (cal === "1") p.set("cal", "1");
     router.replace(p.toString() ? `/tasks?${p}` : "/tasks");
   }
 
   const tasks = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    return state.tasks.filter((t) => {
+    const busyDays = new Set(
+      state.calendarEvents.map((e) => e.start.slice(0, 10)),
+    );
+    const filtered = state.tasks.filter((t) => {
       if (category && t.category !== (category as Category)) return false;
       if (location && t.location !== location) return false;
       if (maxPay && t.budget > Number(maxPay)) return false;
+      if (after && t.deadline < after) return false;
+      if (jobType && (t.jobType ?? "one_off") !== (jobType as JobType)) return false;
+      if (calendarFit && busyDays.has(t.deadline)) return false;
       if (needle) {
         const hay = `${t.title} ${t.description} ${t.category}`.toLowerCase();
         if (!hay.includes(needle)) return false;
       }
       return true;
     });
-  }, [state.tasks, category, location, maxPay, q]);
+    if (me?.role === "student") {
+      return [...filtered].sort(
+        (a, b) =>
+          taskMatchScore(b, me.skills, me.licences) -
+          taskMatchScore(a, me.skills, me.licences),
+      );
+    }
+    return filtered;
+  }, [state.tasks, state.calendarEvents, category, location, maxPay, q, after, jobType, calendarFit, me]);
 
   return (
     <div>
       <PageHero
-        title="Find your next gig."
-        subtitle={`${tasks.length} live tasks across Australia`}
+        title="Find work that fits around study."
+        subtitle="Filter by category, location, pay, date, and job type. Logged-in students see licences and experience first."
       >
         <form
           className="mx-auto mt-8 flex max-w-2xl overflow-hidden rounded-full bg-white p-1.5"
@@ -120,7 +152,7 @@ function TasksInner() {
           <p className="mt-1 text-lg font-semibold">${maxPay}</p>
           <input
             type="range"
-            min={20}
+            min={40}
             max={500}
             step={10}
             value={Number(maxPay)}
@@ -130,9 +162,51 @@ function TasksInner() {
             }}
             className="mt-2 w-full accent-navy"
           />
+          <p className="mt-8 text-xs font-semibold tracking-wide text-ink-soft">
+            On or after
+          </p>
+          <input
+            type="date"
+            className="mt-2 w-full rounded-full border border-black/10 bg-white px-4 py-2.5 text-sm"
+            value={after}
+            onChange={(e) => {
+              setAfter(e.target.value);
+              sync({ after: e.target.value });
+            }}
+          />
+          <p className="mt-8 text-xs font-semibold tracking-wide text-ink-soft">
+            Job type
+          </p>
+          <select
+            className="mt-2 w-full rounded-full border border-black/10 bg-white px-4 py-2.5 text-sm"
+            value={jobType}
+            onChange={(e) => {
+              setJobType(e.target.value);
+              sync({ type: e.target.value });
+            }}
+          >
+            <option value="">Any</option>
+            <option value="one_off">One-off</option>
+            <option value="ongoing">Ongoing</option>
+          </select>
+          <label className="mt-6 flex items-start gap-2 text-sm">
+            <input
+              type="checkbox"
+              className="mt-1"
+              checked={calendarFit}
+              onChange={(e) => {
+                setCalendarFit(e.target.checked);
+                sync({ cal: e.target.checked ? "1" : "" });
+              }}
+            />
+            Hide jobs on days already in my SideQuest calendar
+          </label>
         </aside>
         <div>
-          <p className="text-sm text-ink-soft">Showing {tasks.length} tasks</p>
+          <p className="text-sm text-ink-soft">
+            Showing {tasks.length} tasks
+            {me?.role === "student" ? " · matched to your profile first" : ""}
+          </p>
           <div className="mt-4 space-y-4">
             {tasks.map((t) => {
               const client = state.profiles.find((p) => p.id === t.clientId);

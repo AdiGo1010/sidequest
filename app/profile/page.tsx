@@ -8,6 +8,7 @@ export default function ProfilePage() {
   const { me, updateProfile, state } = useApp();
   const [bio, setBio] = useState(me?.bio ?? "");
   const [skills, setSkills] = useState(me?.skills.join(", ") ?? "");
+  const [licences, setLicences] = useState((me?.licences ?? []).join(", "));
 
   if (!me) {
     return (
@@ -30,6 +31,7 @@ export default function ProfilePage() {
           <p className="mt-1 text-sm text-ink-soft">
             {me.role === "student" ? me.uni : "Client"} · {me.location}
             {me.verifiedBadge ? " · Verified student" : ""}
+            {me.residency === "international" ? " · International visa on file" : ""}
           </p>
         </div>
         {me.verifiedBadge ? (
@@ -52,6 +54,10 @@ export default function ProfilePage() {
               .split(",")
               .map((s) => s.trim())
               .filter(Boolean),
+            licences: licences
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean),
           });
         }}
       >
@@ -71,6 +77,17 @@ export default function ProfilePage() {
             className="mt-1 w-full rounded-2xl border border-black/10 bg-white/80 px-4 py-3"
           />
         </label>
+        {me.role === "student" ? (
+          <label className="block text-sm font-medium">
+            Licences & certifications (comma separated)
+            <input
+              value={licences}
+              onChange={(e) => setLicences(e.target.value)}
+              placeholder="e.g. Driver licence, RSA"
+              className="mt-1 w-full rounded-2xl border border-black/10 bg-white/80 px-4 py-3"
+            />
+          </label>
+        ) : null}
         <button type="submit" className="rounded-full bg-ink px-5 py-2 text-sm text-lime">
           Save profile
         </button>

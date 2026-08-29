@@ -51,6 +51,28 @@ export function matchTaskToWindow(
   return skillMatch ?? local[0] ?? open[0];
 }
 
+export function taskMatchScore(
+  task: Task,
+  skills: string[],
+  licences: string[] = [],
+) {
+  let score = 0;
+  if (skills.includes(task.category)) score += 4;
+  const hay = `${task.title} ${task.description} ${task.requiredSkills ?? ""} ${task.customCategory ?? ""}`.toLowerCase();
+  for (const s of skills) {
+    if (s && hay.includes(s.toLowerCase())) score += 2;
+  }
+  for (const licence of licences) {
+    const l = licence.toLowerCase();
+    if (!l) continue;
+    if (hay.includes(l)) score += 3;
+    if (l.includes("driver") && (hay.includes("deliver") || hay.includes("ute") || hay.includes("driv"))) {
+      score += 2;
+    }
+  }
+  return score;
+}
+
 export function categoryForTask(task?: Task, skills?: string[]): Category {
   if (task) return task.category;
   if (skills?.[0]) return skills[0] as Category;

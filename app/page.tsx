@@ -11,19 +11,19 @@ export default function HomePage() {
       <section className="mx-auto w-full max-w-6xl px-5 pb-16 pt-10 sm:px-8 sm:pt-16">
         <div className="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-ink">
           <span aria-hidden>✦</span>
-          NOW LIVE IN SYDNEY, MELBOURNE & BRISBANE
+          BUILT BY STUDENTS, FOR STUDENTS
         </div>
-        <h1 className="mt-7 max-w-3xl text-[2.4rem] font-bold leading-[1.12] tracking-tight sm:text-6xl">
-          Earn money doing what you&apos;re{" "}
-          <span className="sq-underline">good at</span>
-          <span className="mt-2 block text-[1.55rem] font-semibold sm:text-4xl">
-            — for students, by students.
+        <h1 className="mt-7 max-w-3xl text-[2.15rem] font-bold leading-[1.14] tracking-tight sm:text-5xl">
+          What if every student could turn free time, skills, and unused gear into{" "}
+          <span className="sq-underline">paid work</span>
+          <span className="mt-3 block text-[1.35rem] font-semibold leading-snug sm:text-3xl">
+            — without high fees or endless applications?
           </span>
         </h1>
-        <p className="mt-6 max-w-xl text-base leading-7 text-ink-soft sm:text-lg">
-          Skip the rejection emails. Pick up real freelance gigs from people in your
-          city — cleaning, design, tutoring, deliveries. Cash in your account by the
-          weekend.
+        <p className="mt-6 max-w-2xl text-base leading-7 text-ink-soft sm:text-lg">
+          This is SideQuest: a marketplace built for university students who want
+          flexible freelance work that fits around their studies. Lower fees, real
+          opportunities, and equipment rental — so any student can take on any task.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
@@ -39,13 +39,13 @@ export default function HomePage() {
             Post a Task <Arrow />
           </Link>
         </div>
-        <div className="mt-8 flex flex-wrap gap-2 text-xs font-medium text-ink-soft">
-          {["Get paid in 24h", ".edu.au verified", "Rent the gear"].map((t) => (
-            <span key={t} className="rounded-full bg-white/80 px-3 py-1.5">
-              {t}
-            </span>
-          ))}
-        </div>
+        <p className="mt-6 max-w-2xl text-sm leading-6 text-ink-soft">
+          Not Airtasker. Not Fiverr. The difference is you — we&apos;re built for
+          students tired of the same line:{" "}
+          <span className="italic text-ink">
+            “Unfortunately, we&apos;ve decided to progress with other applicants.”
+          </span>
+        </p>
       </section>
 
       <section className="mx-auto grid w-full max-w-6xl grid-cols-2 gap-3 px-5 sm:grid-cols-4 sm:px-8">
@@ -62,6 +62,37 @@ export default function HomePage() {
         ))}
       </section>
 
+      <section className="mx-auto mt-20 grid w-full max-w-6xl gap-6 px-5 sm:grid-cols-2 sm:px-8">
+        <div className="rounded-3xl bg-white p-8">
+          <p className="text-xs font-semibold tracking-widest text-ink-soft">
+            GETTING STARTED
+          </p>
+          <h2 className="mt-2 text-2xl font-bold">Join as a student — or post work</h2>
+          <p className="mt-4 text-sm leading-6 text-ink-soft">
+            Sign up on Login or Join. Students who want to accept tasks register with a
+            valid .edu.au email. Other emails can still join and post work, but can&apos;t
+            take student tasks.
+          </p>
+          <Link href="/signup" className="mt-5 inline-block text-sm font-medium">
+            Join free →
+          </Link>
+        </div>
+        <div className="rounded-3xl bg-white p-8">
+          <p className="text-xs font-semibold tracking-widest text-ink-soft">
+            THE DASHBOARD
+          </p>
+          <h2 className="mt-2 text-2xl font-bold">Your command centre</h2>
+          <p className="mt-4 text-sm leading-6 text-ink-soft">
+            Task history, hours worked, earnings, and an illustrative tax figure for
+            your return. International students are capped at 48 hours per fortnight —
+            extra applications block once you hit it. Domestic students have no cap.
+          </p>
+          <Link href="/dashboard" className="mt-5 inline-block text-sm font-medium">
+            Open dashboard →
+          </Link>
+        </div>
+      </section>
+
       <section className="mx-auto mt-20 w-full max-w-6xl px-5 sm:px-8">
         <div className="flex items-end justify-between gap-4">
           <div>
@@ -71,7 +102,7 @@ export default function HomePage() {
             </h2>
           </div>
           <Link href="/tasks" className="text-sm font-medium">
-            All categories →
+            Find Work →
           </Link>
         </div>
         <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -93,46 +124,39 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto mt-20 grid w-full max-w-6xl gap-6 px-5 sm:grid-cols-2 sm:px-8">
+      <section className="mx-auto mt-20 grid w-full max-w-6xl gap-6 px-5 lg:grid-cols-3 sm:px-8">
         <div className="rounded-3xl bg-white p-8">
           <p className="text-xs font-semibold tracking-widest text-ink-soft">
-            FOR STUDENTS
+            FINDING WORK
           </p>
-          <h2 className="mt-2 text-2xl font-bold">Side cash, on your schedule</h2>
-          <ol className="mt-6 space-y-4 text-sm leading-6">
-            <li>
-              <span className="font-semibold">01</span> — Sign up free with your
-              .edu.au email
-            </li>
-            <li>
-              <span className="font-semibold">02</span> — Browse local tasks & apply
-              with one tap
-            </li>
-            <li>
-              <span className="font-semibold">03</span> — Get the job done & cash hits
-              your bank
-            </li>
-          </ol>
+          <h2 className="mt-2 text-xl font-bold">Filter around your life</h2>
+          <p className="mt-3 text-sm leading-6 text-ink-soft">
+            Category, location, pay, date, and job type. Sync Google Calendar and we
+            surface jobs that fit around class. Recommendations use your licences and
+            experience — a driver&apos;s licence or gardening hours means more of those
+            jobs.
+          </p>
         </div>
         <div className="rounded-3xl bg-white p-8">
           <p className="text-xs font-semibold tracking-widest text-ink-soft">
-            FOR CLIENTS
+            POSTING WORK
           </p>
-          <h2 className="mt-2 text-2xl font-bold">Get help, fast & affordable</h2>
-          <ol className="mt-6 space-y-4 text-sm leading-6">
-            <li>
-              <span className="font-semibold">01</span> — Post your task — title,
-              budget, deadline
-            </li>
-            <li>
-              <span className="font-semibold">02</span> — Pick from verified student
-              applicants
-            </li>
-            <li>
-              <span className="font-semibold">03</span> — Pay only when the job&apos;s
-              complete
-            </li>
-          </ol>
+          <h2 className="mt-2 text-xl font-bold">Pay like an adult</h2>
+          <p className="mt-3 text-sm leading-6 text-ink-soft">
+            Description, location, date, budget, skills, and gear. Tasks start at $40+,
+            always at or above minimum wage — no youth wage discount. If you&apos;re doing
+            the job, you get paid like an adult.
+          </p>
+        </div>
+        <div className="rounded-3xl bg-white p-8">
+          <p className="text-xs font-semibold tracking-widest text-ink-soft">
+            HOW JOBS MATCH
+          </p>
+          <h2 className="mt-2 text-xl font-bold">Profile, then dual ratings</h2>
+          <p className="mt-3 text-sm leading-6 text-ink-soft">
+            List skills and certifications; we recommend tasks that fit. Taskers and
+            posters rate each other — like Uber. Higher rating, faster approvals.
+          </p>
         </div>
       </section>
 
@@ -164,26 +188,12 @@ export default function HomePage() {
           EQUIPMENT RENTAL
         </p>
         <h2 className="mt-2 max-w-xl text-3xl font-bold tracking-tight">
-          Don&apos;t own it? Rent it.
+          Don&apos;t own the tools? Rent them.
         </h2>
         <p className="mt-3 max-w-xl text-sm leading-6 text-ink-soft">
-          Take on jobs you couldn&apos;t otherwise. Power tools, cleaning gear, design
-          tablets — all available by the day from city hubs.
+          Cleaning supplies, gardening gear, or whatever the task needs — cheaper than
+          buying for a one-off, so you can deliver better work and a stronger rating.
         </p>
-        <div className="mt-6 flex gap-3 text-3xl" aria-hidden>
-          <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-sand">
-            🔩
-          </span>
-          <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-sand">
-            🧹
-          </span>
-          <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-sand">
-            💦
-          </span>
-          <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-sand">
-            🪜
-          </span>
-        </div>
         <Link
           href="/equipment"
           className="mt-6 inline-flex rounded-full bg-navy px-5 py-2.5 text-sm font-medium text-white"
@@ -193,9 +203,14 @@ export default function HomePage() {
       </section>
 
       <section className="mt-20 bg-navy px-5 py-16 text-center text-white sm:px-8">
-        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Your next paycheque is one tap away.
+        <h2 className="mx-auto max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl">
+          Join us — and start your first Side Quest today.
         </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-white/70">
+          Find opportunities. Get tasks completed. Build your future. Students earn,
+          gain experience, rent gear, and manage hours. Posters get verified, reliable
+          student help when they need it.
+        </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Link
             href="/signup"

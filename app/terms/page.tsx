@@ -11,8 +11,11 @@ export default function TermsPage() {
       </p>
       <h2 className="mt-8 text-lg font-semibold text-ink">Accounts</h2>
       <p className="mt-2">
-        Student accounts require a university email (.edu.au). You are responsible for
-        gigs you accept. Clients are responsible for accurate briefs and agreed pay.
+        Student accounts that accept work need a university email (.edu.au).
+        International students must provide a visa copy and are capped at 48 hours
+        per fortnight. Domestic students have no cap. Clients may use any email to
+        post work. You are responsible for gigs you accept; clients are responsible
+        for accurate briefs and agreed pay (minimum $40, adult rate).
       </p>
       <h2 className="mt-8 text-lg font-semibold text-ink">Fees</h2>
       <p className="mt-2">
