@@ -1,10 +1,12 @@
 import { SEED } from "./seed";
+import { sliceMarket } from "./market";
 import type { AppState } from "./types";
 
 const KEY = "sidequest-state-v2";
 
 let memory: AppState | null = null;
 const listeners = new Set<() => void>();
+let pushTimer: ReturnType<typeof setTimeout> | null = null;
 
 function cloneSeed(): AppState {
   return structuredClone(SEED);
@@ -42,13 +44,52 @@ export function subscribe(listener: () => void) {
   return () => listeners.delete(listener);
 }
 
-export function setState(updater: (prev: AppState) => AppState) {
-  const next = updater(structuredClone(getSnapshot()));
+function persistLocal(next: AppState) {
   memory = next;
   if (typeof window !== "undefined") {
     window.localStorage.setItem(KEY, JSON.stringify(next));
   }
   listeners.forEach((l) => l());
+}
+
+function queuePush() {
+  if (typeof window === "undefined") return;
+  if (pushTimer) clearTimeout(pushTimer);
+  pushTimer = setTimeout(() => {
+    const body = sliceMarket(getSnapshot());
+    void fetch("/api/market", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }).catch(() => {
+      /* keep local copy if the shared db is unreachable */
+    });
+  }, 400);
+}
+
+export function setState(
+  updater: (prev: AppState) => AppState,
+  opts?: { persistRemote?: boolean },
+) {
+  const next = updater(structuredClone(getSnapshot()));
+  persistLocal(next);
+  if (opts?.persistRemote !== false) queuePush();
+}
+
+export function applyRemoteSlice(
+  slice: ReturnType<typeof sliceMarket>,
+) {
+  setState(
+    (s) => ({
+      ...s,
+      profiles: slice.profiles.length ? slice.profiles : s.profiles,
+      tasks: slice.tasks.length ? slice.tasks : s.tasks,
+      applications: slice.applications.length ? slice.applications : s.applications,
+      messages: slice.messages,
+      reviews: slice.reviews.length ? slice.reviews : s.reviews,
+    }),
+    { persistRemote: false },
+  );
 }
 
 export function resetDemo() {

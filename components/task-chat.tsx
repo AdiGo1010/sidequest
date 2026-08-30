@@ -27,8 +27,8 @@ export function TaskChat({ taskId }: { taskId: string }) {
       <h2 className="font-semibold">Messages</h2>
       <p className="mt-1 text-xs text-ink-soft">
         {isClient
-          ? "Chat with applicants. Accept or reject them from My tasks."
-          : "Chat with the poster. They can accept or reject your request."}
+          ? "You and every applicant see this thread. Accept or reject from My tasks."
+          : "You and the poster both see this thread. They accept or reject from My tasks."}
       </p>
       <ul className="mt-4 max-h-64 space-y-2 overflow-y-auto">
         {thread.map((m) => {

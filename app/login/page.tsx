@@ -59,8 +59,8 @@ export default function LoginPage() {
     <div className="mx-auto w-full max-w-md px-5 py-12">
       <h1 className="text-3xl font-bold tracking-tight">Log in</h1>
       <p className="mt-2 text-sm leading-6 text-ink-soft">
-        Students accept tasks with a .edu.au email. Anyone can post work. Try demo
-        student:{" "}
+        Students accept tasks with a .edu.au email. Anyone can post work — posts and
+        messages sync so other devices can see them. Try demo student:{" "}
         <button
           type="button"
           className="font-medium text-ink underline"

@@ -6,7 +6,8 @@ import {
   INTERNATIONAL_FORTNIGHT_HOURS,
   MIN_TASK_BUDGET,
 } from "./compliance";
-import { getServerSnapshot, getSnapshot, setState, subscribe, uid } from "./store";
+import { getServerSnapshot, getSnapshot, setState, subscribe, uid, applyRemoteSlice } from "./store";
+import { mergeMarket, sliceMarket } from "./market";
 import { isAustralianUniEmail, uniFromEmail } from "./uni";
 import type {
   Application,
@@ -25,6 +26,27 @@ export function useApp() {
   useEffect(() => setMounted(true), []);
   const state = mounted ? snap : getServerSnapshot();
   const me = state.profiles.find((p) => p.id === state.currentUserId) ?? null;
+
+  useEffect(() => {
+    let stop = false;
+    async function pull() {
+      try {
+        const res = await fetch("/api/market", { cache: "no-store" });
+        if (!res.ok || stop) return;
+        const remote = await res.json();
+        const merged = mergeMarket(remote, sliceMarket(getSnapshot()));
+        applyRemoteSlice(merged);
+      } catch {
+        /* stay on local data */
+      }
+    }
+    void pull();
+    const timer = window.setInterval(pull, 5000);
+    return () => {
+      stop = true;
+      window.clearInterval(timer);
+    };
+  }, []);
 
   const signup = useCallback(
     (input: {

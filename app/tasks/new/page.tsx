@@ -60,8 +60,9 @@ export default function NewTaskPage() {
     <div className="mx-auto w-full max-w-xl px-5 py-10">
       <h1 className="text-3xl font-bold tracking-tight">Post a task</h1>
       <p className="mt-2 text-sm leading-6 text-ink-soft">
-        Description, location, date, budget, and any skills or equipment. Tasks start
-        at ${MIN_TASK_BUDGET}+ — at or above minimum wage, no youth discount.
+        Saved for everyone — other phones and laptops will see this task. Chat is
+        shared with the poster and anyone who applies. Tasks start at $
+        {MIN_TASK_BUDGET}+ — adult pay, no youth discount.
       </p>
       <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-4">
         <label className="text-sm font-medium">
